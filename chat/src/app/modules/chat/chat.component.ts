@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -16,6 +17,7 @@ export class ChatComponent implements OnInit {
 
   public message = '';
   public messages = [];
+  public users: User[] = [];
   public loading = true;
   public usersOnline = null;
 
@@ -43,6 +45,7 @@ export class ChatComponent implements OnInit {
     this.chatService.getUsers(
       (users: number) => {
         console.log(users);
+        this.getUsers();
         if (!this.usersOnline) {
           this.usersOnline = users;
           this.loading = false;
@@ -56,6 +59,16 @@ export class ChatComponent implements OnInit {
     );
 
     this.userService.setStatus(this.auth.user._id, true);
+  }
+
+  async getUsers() {
+    try {
+      const users: User[] = await this.userService.getUsers().toPromise();
+      this.users = users;
+      console.log(users);
+    } catch (error) {
+
+    }
   }
 
   sendMessage() {

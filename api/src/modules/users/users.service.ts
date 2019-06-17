@@ -14,7 +14,7 @@ export class UsersService {
     }
 
     findAll(): Promise<User[]> {
-        return this.userModel.find().exec();
+        return this.userModel.find({}).sort('-createdAt').exec();
     }
 
     findById(id: string): Promise<User> {

@@ -3,11 +3,12 @@
     <div style="color: white;" class="logo">
       <p style="text-align: center; font-size: 20px; padding-top: 1px;">chat :v</p>
     </div>
-    <!-- <ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'">
-      <li nz-menu-item>
-        <span><i nz-icon type="file"></i><span class="nav-text">nav 1</span></span>
+    <ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'">
+      <li nz-menu-item *ngFor="let user of users">
+        <span> <i *ngIf="user.status" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'"
+            [nzTwotoneColor]="'#52c41a'"></i><span class="nav-text">{{user.userName}}</span></span>
       </li>
-    </ul> -->
+    </ul>
     <div style="padding-top: 65vh; text-align: center;">
       <button (click)="auth.logout()" nz-button nzType="primary"><i nz-icon nzType="logout" nzTheme="outline"></i>
         Cerrar Sesión</button>
