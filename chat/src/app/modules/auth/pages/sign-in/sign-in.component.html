@@ -1,0 +1,59 @@
+<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group [nzPrefix]="prefixMail">
+        <input nz-input formControlName="email" id="email" placeholder="E-mail" />
+      </nz-input-group>
+      <nz-form-explain *ngIf="validateForm.get('email')?.dirty && validateForm.get('email')?.errors">
+        El email no es valido!
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group [nzPrefix]="prefixUser">
+        <input type="text" nz-input formControlName="userName" placeholder="Username" />
+      </nz-input-group>
+      <nz-form-explain *ngIf="validateForm.get('userName')?.dirty && validateForm.get('userName')?.errors">Nombre de
+        usuario obligatorio!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group [nzPrefix]="prefixLock">
+        <input type="password" nz-input formControlName="password" placeholder="Password" />
+      </nz-input-group>
+      <nz-form-explain *ngIf="validateForm.get('password')?.dirty && validateForm.get('password')?.errors">Contraseña
+        obligatoria!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-input-group [nzPrefix]="prefixLock">
+        <input nz-input type="password" formControlName="checkPassword" id="checkPassword"
+          placeholder="Confirmar contraseña" />
+      </nz-input-group>
+      <nz-form-explain *ngIf="validateForm.get('checkPassword')?.dirty && validateForm.get('checkPassword')?.errors">
+        <ng-container *ngIf="validateForm.get('checkPassword')?.hasError('required')">
+          Confirma tu contraseña!
+        </ng-container>
+        <ng-container *ngIf="validateForm.get('checkPassword')?.hasError('confirm')">
+          Las contraseñas no coinciden!
+        </ng-container>
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <button *ngIf="!loading" nz-button class="login-form-button" [nzType]="'primary'">Registrarse</button>
+      <button *ngIf="loading" nz-button class="login-form-button" nzType="primary" nzLoading><i nz-icon
+          type="poweroff"></i>Cargando</button>
+      O
+      <a [routerLink]="['./../']">Inicia sesión ahora!</a>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+<ng-template #prefixMail><i nz-icon type="mail"></i></ng-template>
+<ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
+<ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+<h4 style="color: #f5222d;" *ngIf="error">Algo salio mal, intenta de nuevo</h4>

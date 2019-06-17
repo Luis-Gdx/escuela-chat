@@ -1,0 +1,53 @@
+<nz-layout style="height: 100vh;">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="triggerTemplate">
+    <div style="color: white;" class="logo">
+      <p style="text-align: center; font-size: 20px; padding-top: 1px;">chat :v</p>
+    </div>
+    <!-- <ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'">
+      <li nz-menu-item>
+        <span><i nz-icon type="file"></i><span class="nav-text">nav 1</span></span>
+      </li>
+    </ul> -->
+    <div style="padding-top: 65vh; text-align: center;">
+      <button (click)="auth.logout()" nz-button nzType="primary"><i nz-icon nzType="logout" nzTheme="outline"></i>
+        Cerrar Sesión</button>
+    </div>
+  </nz-sider>
+  <nz-layout *ngIf="usersOnline || loading; else maxUsers">
+    <nz-header style="background: #fff; padding:0;">
+      <i class="trigger" nz-icon [type]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+        (click)="isCollapsed = !isCollapsed"></i>
+    </nz-header>
+    <nz-content style="margin:0 16px;">
+      <br>
+      <br>
+      <div style="padding:24px; background: #fff; min-height: 360px; height: 100%;">
+        <nz-skeleton [nzLoading]="loading" [nzActive]="true">
+          <div *ngFor="let message of messages" nz-row nzType="flex" nzJustify="left">
+            <div nz-col>
+              <strong>{{message.user.userName}}</strong> <span style="font-size: 10px">
+                {{message.date | date : 'dd/MM/yy HH:mm:ss a'}}</span>
+              <p>{{message.message}}</p>
+            </div>
+          </div>
+        </nz-skeleton>
+      </div>
+    </nz-content>
+    <nz-footer style="text-align: center;">
+      <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+        <input [(ngModel)]="message" (keyup.enter)="sendMessage()" type="text" nz-input
+          placeholder="Escribe un mensaje" />
+      </nz-input-group>
+      <ng-template #suffixButton>
+        <button (click)="sendMessage()" nz-button nzType="primary" nzSize="large" nzSearch>Enviar</button>
+      </ng-template>
+    </nz-footer>
+  </nz-layout>
+  <ng-template #maxUsers>
+    <span style="padding-top: 150px; text-align: center;">Hay demaciados usuarios conectados, espere a que vaje el
+      numero de usuarios.</span>
+  </ng-template>
+</nz-layout>
+<ng-template #trigger>
+  <i nz-icon type="up"></i>
+</ng-template>
