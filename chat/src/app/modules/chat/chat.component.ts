@@ -61,6 +61,14 @@ export class ChatComponent implements OnInit {
     this.userService.setStatus(this.auth.user._id, true);
   }
 
+  chatItenOnMouseOver(el, out) {
+    console.log(el);
+    if (!out) {
+      el.innerHTML += ':v';
+    } else {
+    }
+  }
+
   async getUsers() {
     try {
       const users: User[] = await this.userService.getUsers().toPromise();

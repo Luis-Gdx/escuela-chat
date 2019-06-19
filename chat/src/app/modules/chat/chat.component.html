@@ -5,14 +5,21 @@
     </div>
     <ul nz-menu [nzTheme]="'dark'" [nzMode]="'inline'">
       <li nz-menu-item *ngFor="let user of users">
-        <span> <i *ngIf="user.status" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'"
-            [nzTwotoneColor]="'#52c41a'"></i><span class="nav-text">{{user.userName}}</span></span>
+        <span>
+          <i *ngIf="user.status" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'"
+            [nzTwotoneColor]="'#52c41a'"></i>
+          <span class="nav-text">{{user.userName}}</span>
+        </span>
+      </li>
+      <li nz-menu-item>
+        <button (click)="auth.logout()" nz-button nzType="primary"><i nz-icon nzType="logout" nzTheme="outline"></i>
+          Cerrar Sesión</button>
       </li>
     </ul>
-    <div style="padding-top: 65vh; text-align: center;">
+    <!-- <div style="padding-top: 65vh; text-align: center;">
       <button (click)="auth.logout()" nz-button nzType="primary"><i nz-icon nzType="logout" nzTheme="outline"></i>
         Cerrar Sesión</button>
-    </div>
+    </div> -->
   </nz-sider>
   <nz-layout *ngIf="usersOnline || loading; else maxUsers">
     <nz-header style="background: #fff; padding:0;">
@@ -22,12 +29,18 @@
     <nz-content style="margin:0 16px;">
       <br>
       <br>
-      <div style="padding:24px; background: #fff; min-height: 360px; height: 100%;">
+      <div style="padding:24px; background: #fff; min-height: 360px; height: 95%; overflow-y: auto;">
         <nz-skeleton [nzLoading]="loading" [nzActive]="true">
-          <div *ngFor="let message of messages" nz-row nzType="flex" nzJustify="left">
-            <div nz-col>
-              <strong>{{message.user.userName}}</strong> <span style="font-size: 10px">
-                {{message.date | date : 'dd/MM/yy HH:mm:ss a'}}</span>
+          <div class="message" *ngFor="let message of messages; let i = index;" nz-row nzType="flex" nzJustify="left">
+            <div [nzMouseEnterDelay]="0.25" nz-tooltip nzTitle="{{message.date | date : 'dd/MM/yy HH:mm:ss a'}}" nz-col>
+              <div *ngIf="i === 0">
+                <strong>{{message.user.userName}}</strong> <span style="font-size: 10px">
+                  {{message.date | date : 'dd/MM/yy HH:mm:ss a'}}</span>
+              </div>
+              <div *ngIf="i > 0 && message.user.userName !== messages[i - 1].user.userName">
+                <strong>{{message.user.userName}}</strong> <span style="font-size: 10px">
+                  {{message.date | date : 'dd/MM/yy HH:mm:ss a'}}</span>
+              </div>
               <p>{{message.message}}</p>
             </div>
           </div>
