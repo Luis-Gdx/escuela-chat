@@ -5,6 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
+import { URI } from './api';
 import { UsersService } from './users.service';
 
 @Injectable({
@@ -26,7 +27,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/users/login', { email, password }).pipe(
+    return this.http.post<any>(`${URI}/users/login`, { email, password }).pipe(
       map(
         res => {
           const { user, token } = res;
@@ -39,7 +40,7 @@ export class AuthService {
   }
 
   signIn(newUser: User): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/users/signin', newUser).pipe(
+    return this.http.post<any>(`${URI}/users/signin`, newUser).pipe(
       map(
         res => {
           if (!Object.keys(res).find(key => key === 'errmsg')) {
@@ -90,7 +91,7 @@ export class AuthService {
   }
 
   getTokenAndSave() {
-    return this.http.get<any>('http://localhost:3000/users/get-token').pipe(
+    return this.http.get<any>(`${URI}/users/get-token`).pipe(
       map(
         ({ token }) => {
           this.saveToken(token);

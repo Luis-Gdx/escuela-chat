@@ -10,6 +10,7 @@ import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { API_URL } from './services/api';
 
 
 registerLocaleData(en);
@@ -29,8 +30,8 @@ registerLocaleData(en);
         tokenGetter: () => {
           return localStorage.getItem('access_token');
         },
-        whitelistedDomains: ['localhost:3000'],
-        blacklistedRoutes: ['localhost:3000/user/login']
+        whitelistedDomains: [API_URL],
+        blacklistedRoutes: [`${API_URL}/user/login`]
       }
     }),
     BrowserAnimationsModule

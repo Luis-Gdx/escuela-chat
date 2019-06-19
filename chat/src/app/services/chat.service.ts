@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
+import { URI } from './api';
 import { AuthService } from './auth.service';
 
 
@@ -9,7 +10,7 @@ import { AuthService } from './auth.service';
 export class ChatService {
   private socket: SocketIOClient.Socket = null;
   constructor(private auth: AuthService) {
-    this.socket = io('http://localhost:3000');
+    this.socket = io(URI);
   }
 
   sendMessage(message) {
