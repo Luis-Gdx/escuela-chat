@@ -15,6 +15,10 @@ import { API_URL } from './services/api';
 
 registerLocaleData(en);
 
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
+
 @NgModule({
   declarations: [
     AppComponent
@@ -27,9 +31,7 @@ registerLocaleData(en);
     HttpClientModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => {
-          return localStorage.getItem('access_token');
-        },
+        tokenGetter: tokenGetter,
         whitelistedDomains: [API_URL],
         blacklistedRoutes: [`${API_URL}/user/login`]
       }
