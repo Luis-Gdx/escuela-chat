@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as mongoose from 'mongoose';
+import { User } from 'src/types/user';
 
 const saltRounds = 10;
 
@@ -36,7 +37,7 @@ export const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre('save', async function (next) {
-    const user = this as any;
+    const user = this as User;
     const hash = await bcrypt.hash(user.password, saltRounds);
     user.password = hash;
     user.email = user.email.toLowerCase();

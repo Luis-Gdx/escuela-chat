@@ -1,8 +1,11 @@
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Client } from 'socket.io';
+import { MessagesService } from '../messages/messages.service';
 
 @WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+
+    constructor(private messagesService: MessagesService) { }
 
     @WebSocketServer() server;
     users: number = 0;
@@ -29,8 +32,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('chat')
     onChat(client: Client, data) {
-        data.date = Date.now();
-        client.server.emit('chat', data);
+        data.createdAt = Date.now();
+        this.messagesService.create({ user: data.user._id, content: data.content }).then(
+            () => {
+                client.server.emit('chat', data);
+            }
+        );
     }
 
 }

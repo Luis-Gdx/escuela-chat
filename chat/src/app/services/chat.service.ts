@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import * as io from 'socket.io-client';
 import { URI } from './api';
 import { AuthService } from './auth.service';
@@ -9,16 +11,19 @@ import { AuthService } from './auth.service';
 })
 export class ChatService {
   private socket: SocketIOClient.Socket = null;
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private http: HttpClient) {
     this.socket = io(URI);
   }
 
-  sendMessage(message) {
-    this.socket.emit('chat', { message, user: this.auth.user });
+  sendMessage(content) {
+    this.socket.emit('chat', { content, user: this.auth.user });
   }
 
   receiveChat(fn) {
     return this.socket.on('chat', fn);
+  }
+  getMessages(): Observable<any> {
+    return this.http.get(`${URI}/messages`);
   }
 
   getUsers(fn): any {

@@ -1,4 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { take } from 'rxjs/operators';
+import { Message } from 'src/app/models/message';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatService } from 'src/app/services/chat.service';
@@ -16,7 +18,7 @@ export class ChatComponent implements OnInit {
   @ViewChild('trigger', { static: false }) customTrigger: TemplateRef<void>;
 
   public message = '';
-  public messages = [];
+  public messages: Message[] = [];
   public users: User[] = [];
   public loading = true;
   public usersOnline = null;
@@ -33,32 +35,41 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     // this.loading = true;
-    this.chatService.receiveChat(
-      (message) => {
-        console.log(message);
-        console.log(this.messages);
-        this.messages = [...this.messages, message];
-        console.log(this.messages);
+    this.chatService.getMessages().pipe(take(1)).toPromise().then(
+      messages => {
+        this.loading = false;
+        console.log(messages);
+        this.messages = messages ? messages : [];
+        this.chatService.receiveChat(
+          (message) => {
+            console.log(message);
+            console.log(this.messages);
+            this.messages = [...this.messages, message];
+            console.log(this.messages);
+          }
+        );
+
+        this.chatService.getUsers(
+          (users: number) => {
+            console.log(users);
+            this.getUsers();
+            if (!this.usersOnline) {
+              this.usersOnline = users;
+            }
+            // if (users > 10) {
+            //   this.chatService.getUsersClose();
+            // } else {
+            //   this.usersOnline = users;
+            // }
+          }
+        );
+
+        this.userService.setStatus(this.auth.user._id, true);
+      },
+      error => {
+        this.loading = false;
       }
     );
-
-    this.chatService.getUsers(
-      (users: number) => {
-        console.log(users);
-        this.getUsers();
-        if (!this.usersOnline) {
-          this.usersOnline = users;
-          this.loading = false;
-        }
-        // if (users > 10) {
-        //   this.chatService.getUsersClose();
-        // } else {
-        //   this.usersOnline = users;
-        // }
-      }
-    );
-
-    this.userService.setStatus(this.auth.user._id, true);
   }
 
   chatItenOnMouseOver(el, out) {

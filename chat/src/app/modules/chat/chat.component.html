@@ -21,7 +21,9 @@
         Cerrar Sesión</button>
     </div> -->
   </nz-sider>
-  <nz-layout *ngIf="usersOnline || loading; else maxUsers">
+  <!-- <nz-layout *ngIf="!loading; else maxUsers"> -->
+  <!-- <nz-layout *ngIf="usersOnline || !loading; else maxUsers"> -->
+  <nz-layout *ngIf="true; else maxUsers">
     <nz-header style="background: #fff; padding:0;">
       <i class="trigger" nz-icon [type]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
         (click)="isCollapsed = !isCollapsed"></i>
@@ -32,16 +34,17 @@
       <div style="padding:24px; background: #fff; min-height: 360px; height: 95%; overflow-y: auto;">
         <nz-skeleton [nzLoading]="loading" [nzActive]="true">
           <div class="message" *ngFor="let message of messages; let i = index;" nz-row nzType="flex" nzJustify="left">
-            <div [nzMouseEnterDelay]="0.25" nz-tooltip nzTitle="{{message.date | date : 'dd/MM/yy HH:mm:ss a'}}" nz-col>
+            <div [nzMouseEnterDelay]="0.25" nz-tooltip nzTitle="{{message.createdAt | date : 'dd/MM/yy HH:mm:ss a'}}"
+              nz-col>
               <div *ngIf="i === 0">
                 <strong>{{message.user.userName}}</strong> <span style="font-size: 10px">
-                  {{message.date | date : 'dd/MM/yy HH:mm:ss a'}}</span>
+                  {{message.createdAt | date : 'dd/MM/yy HH:mm:ss a'}}</span>
               </div>
               <div *ngIf="i > 0 && message.user.userName !== messages[i - 1].user.userName">
                 <strong>{{message.user.userName}}</strong> <span style="font-size: 10px">
-                  {{message.date | date : 'dd/MM/yy HH:mm:ss a'}}</span>
+                  {{message.createdAt | date : 'dd/MM/yy HH:mm:ss a'}}</span>
               </div>
-              <p>{{message.message}}</p>
+              <p>{{message.content}}</p>
             </div>
           </div>
         </nz-skeleton>

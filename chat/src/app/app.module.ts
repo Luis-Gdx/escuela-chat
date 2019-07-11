@@ -31,7 +31,7 @@ export function tokenGetter() {
     HttpClientModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: tokenGetter,
+        tokenGetter,
         whitelistedDomains: [API_URL],
         blacklistedRoutes: [`${API_URL}/user/login`]
       }
